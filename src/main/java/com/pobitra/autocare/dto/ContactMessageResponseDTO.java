@@ -1,42 +1,25 @@
-package com.pobitra.autocare.entity;
-
-import jakarta.persistence.*;
+package com.pobitra.autocare.dto;
 
 import java.time.LocalDateTime;
 
-@Entity
-@Table(name = "contact_messages")
-public class ContactMessage {
+public class ContactMessageResponseDTO {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    @Column(nullable = false)
     private String name;
-
-    @Column(nullable = false)
     private String email;
-
-    @Column(nullable = false)
     private String subject;
-
-    @Column(nullable = false, columnDefinition = "TEXT")
     private String message;
-
     private LocalDateTime createdAt;
 
-    // No-Argument Constructor
-    public ContactMessage() {
-    }
-
-    @PrePersist
-    public void prePersist() {
-        this.createdAt = LocalDateTime.now();
+    public ContactMessageResponseDTO() {
     }
 
     public Long getId() {
         return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getName() {
@@ -73,5 +56,9 @@ public class ContactMessage {
 
     public LocalDateTime getCreatedAt() {
         return createdAt;
+    }
+
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
     }
 }
