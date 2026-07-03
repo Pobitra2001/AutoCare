@@ -1,8 +1,10 @@
 package com.pobitra.autocare.entity;
 
+import com.pobitra.autocare.enums.PaymentMethod;
+import com.pobitra.autocare.enums.PaymentStatus;
 import jakarta.persistence.*;
 
-import java.math.BigDecimal;
+import java.time.LocalDate;
 
 @Entity
 @Table(name = "invoices")
@@ -12,16 +14,40 @@ public class Invoice {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private BigDecimal totalAmount;
+    @Column(nullable = false, unique = true)
+    private String invoiceNumber;
 
-    private String paymentStatus;
+    @Column(nullable = false)
+    private Double serviceCharge;
 
-    private String paymentMethod;
+    @Column(nullable = false)
+    private Double partsCharge;
+
+    @Column(nullable = false)
+    private Double tax;
+
+    @Column(nullable = false)
+    private Double discount;
+
+    @Column(nullable = false)
+    private Double finalAmount;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private PaymentStatus paymentStatus;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private PaymentMethod paymentMethod;
+
+    @Column(nullable =false)
+    private LocalDate invoiceDate;
 
     @OneToOne
-    @JoinColumn(name = "service_record_id")
+    @JoinColumn(name = "service_record_id", nullable = false)
     private ServiceRecord serviceRecord;
 
+    // No-Argument Constructor
     public Invoice() {
     }
 
@@ -33,28 +59,76 @@ public class Invoice {
         this.id = id;
     }
 
-    public BigDecimal getTotalAmount() {
-        return totalAmount;
+    public String getInvoiceNumber() {
+        return invoiceNumber;
     }
 
-    public void setTotalAmount(BigDecimal totalAmount) {
-        this.totalAmount = totalAmount;
+    public void setInvoiceNumber(String invoiceNumber) {
+        this.invoiceNumber = invoiceNumber;
     }
 
-    public String getPaymentStatus() {
+    public Double getServiceCharge() {
+        return serviceCharge;
+    }
+
+    public void setServiceCharge(Double serviceCharge) {
+        this.serviceCharge = serviceCharge;
+    }
+
+    public Double getPartsCharge() {
+        return partsCharge;
+    }
+
+    public void setPartsCharge(Double partsCharge) {
+        this.partsCharge = partsCharge;
+    }
+
+    public Double getTax() {
+        return tax;
+    }
+
+    public void setTax(Double tax) {
+        this.tax = tax;
+    }
+
+    public Double getDiscount() {
+        return discount;
+    }
+
+    public void setDiscount(Double discount) {
+        this.discount = discount;
+    }
+
+    public Double getFinalAmount() {
+        return finalAmount;
+    }
+
+    public void setFinalAmount(Double finalAmount) {
+        this.finalAmount = finalAmount;
+    }
+
+    public PaymentStatus getPaymentStatus() {
         return paymentStatus;
     }
 
-    public void setPaymentStatus(String paymentStatus) {
+    public void setPaymentStatus(PaymentStatus paymentStatus) {
         this.paymentStatus = paymentStatus;
     }
 
-    public String getPaymentMethod() {
+    public PaymentMethod getPaymentMethod() {
         return paymentMethod;
     }
 
-    public void setPaymentMethod(String paymentMethod) {
+    public void setPaymentMethod(PaymentMethod paymentMethod) {
         this.paymentMethod = paymentMethod;
+    }
+
+    public LocalDate getInvoiceDate() {
+        return invoiceDate;
+    }
+
+    public void setInvoiceDate(LocalDate invoiceDate) {
+        this.invoiceDate = invoiceDate;
     }
 
     public ServiceRecord getServiceRecord() {
@@ -64,5 +138,6 @@ public class Invoice {
     public void setServiceRecord(ServiceRecord serviceRecord) {
         this.serviceRecord = serviceRecord;
     }
-// Generate Getters and Setters
+
+    // Generate Getters and Setters
 }
