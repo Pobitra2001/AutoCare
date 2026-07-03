@@ -1,42 +1,19 @@
-package com.pobitra.autocare.entity;
+package com.pobitra.autocare.dto;
 
 import com.pobitra.autocare.enums.FuelType;
 import com.pobitra.autocare.enums.VehicleType;
-import jakarta.persistence.*;
 
-import java.util.ArrayList;
-import java.util.List;
+public class VehicleResponseDTO {
 
-@Entity
-@Table(name = "vehicles")
-public class Vehicle {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    @Column(nullable = false, unique = true)
     private String vehicleNumber;
-
-    @Column(nullable = false)
     private String brand;
-
-    @Column(nullable = false)
     private String model;
-
-    @Column(nullable = false)
     private String color;
-
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
     private VehicleType vehicleType;
-
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
     private FuelType fuelType;
-
-    @Column(nullable = false)
     private Integer manufacturingYear;
+    private Long customerId;
 
     public Long getId() {
         return id;
@@ -102,32 +79,12 @@ public class Vehicle {
         this.manufacturingYear = manufacturingYear;
     }
 
-    public Customer getCustomer() {
-        return customer;
+    public Long getCustomerId() {
+        return customerId;
     }
 
-    public void setCustomer(Customer customer) {
-        this.customer = customer;
+    public void setCustomerId(Long customerId) {
+        this.customerId = customerId;
     }
-
-    public List<ServiceRecord> getServiceRecords() {
-        return serviceRecords;
-    }
-
-    public void setServiceRecords(List<ServiceRecord> serviceRecords) {
-        this.serviceRecords = serviceRecords;
-    }
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "customer_id", nullable = false)
-    private Customer customer;
-
-    @OneToMany(mappedBy = "vehicle", cascade = CascadeType.ALL)
-    private List<ServiceRecord> serviceRecords = new ArrayList<>();
-
-    // No-Argument Constructor
-    public Vehicle() {
-    }
-
-
+// getters and setters
 }
