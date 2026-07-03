@@ -1,5 +1,6 @@
 package com.pobitra.autocare.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 
 @Entity
@@ -10,18 +11,20 @@ public class Feedback {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(nullable = false)
     private Integer rating;
 
-    @Column(columnDefinition = "TEXT")
+    @Column(nullable = false, columnDefinition = "TEXT")
     private String comment;
 
-    @ManyToOne
-    @JoinColumn(name = "customer_id")
+    @JsonBackReference
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "customer_id", nullable = false)
     private Customer customer;
-    public Feedback(){
 
+    // No-Argument Constructor
+    public Feedback() {
     }
-
 
     public Long getId() {
         return id;
@@ -54,5 +57,4 @@ public class Feedback {
     public void setCustomer(Customer customer) {
         this.customer = customer;
     }
-// Generate Getters and Setters
 }

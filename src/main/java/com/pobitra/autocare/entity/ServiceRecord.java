@@ -1,5 +1,6 @@
 package com.pobitra.autocare.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.pobitra.autocare.enums.ServiceStatus;
 import jakarta.persistence.*;
 
@@ -26,6 +27,7 @@ public class ServiceRecord {
     @Column(nullable = false)
     private ServiceStatus status;
 
+    @JsonBackReference
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "vehicle_id", nullable = false)
     private Vehicle vehicle;

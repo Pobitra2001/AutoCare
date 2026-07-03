@@ -1,5 +1,7 @@
 package com.pobitra.autocare.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.pobitra.autocare.enums.FuelType;
 import com.pobitra.autocare.enums.VehicleType;
 import jakarta.persistence.*;
@@ -118,10 +120,12 @@ public class Vehicle {
         this.serviceRecords = serviceRecords;
     }
 
+    @JsonBackReference
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "customer_id", nullable = false)
     private Customer customer;
 
+    @JsonManagedReference
     @OneToMany(mappedBy = "vehicle", cascade = CascadeType.ALL)
     private List<ServiceRecord> serviceRecords = new ArrayList<>();
 

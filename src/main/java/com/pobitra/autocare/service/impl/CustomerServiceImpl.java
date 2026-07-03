@@ -2,14 +2,19 @@ package com.pobitra.autocare.service.impl;
 
 import com.pobitra.autocare.dto.CustomerRequestDTO;
 import com.pobitra.autocare.dto.CustomerResponseDTO;
+import com.pobitra.autocare.dto.PageResponseDTO;
 import com.pobitra.autocare.entity.Customer;
+import com.pobitra.autocare.exception.DuplicateResourceException;
 import com.pobitra.autocare.exception.ResourceNotFoundException;
 import com.pobitra.autocare.repository.CustomerRepository;
 import com.pobitra.autocare.service.CustomerService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class CustomerServiceImpl implements CustomerService {
@@ -20,16 +25,13 @@ public class CustomerServiceImpl implements CustomerService {
         this.customerRepository = customerRepository;
     }
 
-
     @Override
     public CustomerResponseDTO saveCustomer(CustomerRequestDTO dto) {
 
-        // Business Rule
         if (customerRepository.existsByPhone(dto.getPhone())) {
-            throw new RuntimeException("Phone number already exists");
+            throw new DuplicateResourceException("Phone number already exists.");
         }
 
-        // DTO -> Entity
         Customer customer = new Customer();
         customer.setName(dto.getName());
         customer.setPhone(dto.getPhone());
@@ -38,7 +40,6 @@ public class CustomerServiceImpl implements CustomerService {
 
         Customer savedCustomer = customerRepository.save(customer);
 
-        // Entity -> ResponseDTO
         CustomerResponseDTO response = new CustomerResponseDTO();
         response.setId(savedCustomer.getId());
         response.setName(savedCustomer.getName());
@@ -50,9 +51,49 @@ public class CustomerServiceImpl implements CustomerService {
         return response;
     }
 
+
     @Override
-    public List<Customer> getAllCustomers() {
-        return customerRepository.findAll();
+    public PageResponseDTO<CustomerResponseDTO> getAllCustomers(
+            int page,
+            int size,
+            String sortBy,
+            String direction) {
+
+        Sort sort = direction.equalsIgnoreCase("asc")
+                ? Sort.by(sortBy).ascending()
+                : Sort.by(sortBy).descending();
+
+        Pageable pageable = PageRequest.of(page, size, sort);
+
+        Page<Customer> customerPage = customerRepository.findAll(pageable);
+
+        List<CustomerResponseDTO> customerDTOs = customerPage.getContent()
+                .stream()
+                .map(customer -> {
+
+                    CustomerResponseDTO dto = new CustomerResponseDTO();
+
+                    dto.setId(customer.getId());
+                    dto.setName(customer.getName());
+                    dto.setPhone(customer.getPhone());
+                    dto.setEmail(customer.getEmail());
+                    dto.setAddress(customer.getAddress());
+                    dto.setCreatedAt(customer.getCreatedAt());
+
+                    return dto;
+
+                }).toList();
+
+        PageResponseDTO<CustomerResponseDTO> response = new PageResponseDTO<>();
+
+        response.setContent(customerDTOs);
+        response.setPage(customerPage.getNumber());
+        response.setSize(customerPage.getSize());
+        response.setTotalElements(customerPage.getTotalElements());
+        response.setTotalPages(customerPage.getTotalPages());
+        response.setLast(customerPage.isLast());
+
+        return response;
     }
 
     @Override
@@ -67,7 +108,8 @@ public class CustomerServiceImpl implements CustomerService {
     public Customer updateCustomer(Long id, Customer customer) {
 
         Customer existingCustomer = customerRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Customer not found with id: " + id));
+                .orElseThrow(() ->
+                        new ResourceNotFoundException("Customer not found with id: " + id));
 
         existingCustomer.setName(customer.getName());
         existingCustomer.setPhone(customer.getPhone());
