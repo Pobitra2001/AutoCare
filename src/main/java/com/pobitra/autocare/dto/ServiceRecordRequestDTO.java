@@ -22,6 +22,9 @@ public class ServiceRecordRequestDTO {
     @NotNull(message = "Vehicle ID is required")
     private Long vehicleId;
 
+    @NotNull(message = "Booking ID is required")
+    private Long bookingId;
+
     public String getServiceType() {
         return serviceType;
     }
@@ -61,5 +64,12 @@ public class ServiceRecordRequestDTO {
     public void setVehicleId(Long vehicleId) {
         this.vehicleId = vehicleId;
     }
-// Getters and Setters
+
+    public Long getBookingId() {
+        return bookingId;
+    }
+
+    public void setBookingId(Long bookingId) {
+        this.bookingId = bookingId;
+    }
 }

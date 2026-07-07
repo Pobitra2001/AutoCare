@@ -7,11 +7,21 @@ import java.time.LocalDate;
 public class ServiceRecordResponseDTO {
 
     private Long id;
+
     private String serviceType;
+
     private String description;
+
     private LocalDate serviceDate;
+
     private ServiceStatus status;
+
     private Long vehicleId;
+
+    private Long bookingId;
+
+    public ServiceRecordResponseDTO() {
+    }
 
     public Long getId() {
         return id;
@@ -60,5 +70,12 @@ public class ServiceRecordResponseDTO {
     public void setVehicleId(Long vehicleId) {
         this.vehicleId = vehicleId;
     }
-// Getters and Setters
+
+    public Long getBookingId() {
+        return bookingId;
+    }
+
+    public void setBookingId(Long bookingId) {
+        this.bookingId = bookingId;
+    }
 }

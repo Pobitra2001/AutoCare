@@ -8,6 +8,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -25,6 +26,7 @@ public class FeedbackController {
     }
 
     @Operation(summary = "Create new feedback")
+    @PreAuthorize("hasAnyRole('ADMIN','STAFF')")
     @PostMapping
     public ResponseEntity<FeedbackResponseDTO> createFeedback(
             @Valid @RequestBody FeedbackRequestDTO dto) {
@@ -35,6 +37,7 @@ public class FeedbackController {
     }
 
     @Operation(summary = "Get all feedback")
+    @PreAuthorize("hasAnyRole('ADMIN','STAFF')")
     @GetMapping
     public ResponseEntity<List<FeedbackResponseDTO>> getAllFeedbacks() {
 
@@ -42,6 +45,7 @@ public class FeedbackController {
     }
 
     @Operation(summary = "Get feedback by ID")
+    @PreAuthorize("hasAnyRole('ADMIN','STAFF')")
     @GetMapping("/{id}")
     public ResponseEntity<FeedbackResponseDTO> getFeedbackById(
             @PathVariable Long id) {
@@ -50,6 +54,7 @@ public class FeedbackController {
     }
 
     @Operation(summary = "Get feedback by rating")
+    @PreAuthorize("hasAnyRole('ADMIN','STAFF')")
     @GetMapping("/rating/{rating}")
     public ResponseEntity<List<FeedbackResponseDTO>> getFeedbackByRating(
             @PathVariable Integer rating) {
@@ -58,6 +63,7 @@ public class FeedbackController {
     }
 
     @Operation(summary = "Get feedback by customer ID")
+    @PreAuthorize("hasAnyRole('ADMIN','STAFF')")
     @GetMapping("/customer/{customerId}")
     public ResponseEntity<List<FeedbackResponseDTO>> getFeedbackByCustomer(
             @PathVariable Long customerId) {
@@ -66,6 +72,7 @@ public class FeedbackController {
     }
 
     @Operation(summary = "Delete feedback")
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteFeedback(@PathVariable Long id) {
 

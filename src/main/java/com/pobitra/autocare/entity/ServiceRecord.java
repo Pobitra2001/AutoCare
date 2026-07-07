@@ -27,10 +27,21 @@ public class ServiceRecord {
     @Column(nullable = false)
     private ServiceStatus status;
 
+    // ==========================
+    // Vehicle -> ServiceRecord (Many Service Records for One Vehicle)
+    // ==========================
     @JsonBackReference
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "vehicle_id", nullable = false)
     private Vehicle vehicle;
+
+    // ==========================
+    // Booking -> ServiceRecord (One Booking = One Service Record)
+    // ==========================
+    @JsonBackReference
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "booking_id", nullable = false, unique = true)
+    private Booking booking;
 
     // No-Argument Constructor
     public ServiceRecord() {
@@ -83,5 +94,12 @@ public class ServiceRecord {
     public void setVehicle(Vehicle vehicle) {
         this.vehicle = vehicle;
     }
-// Getters and Setters
+
+    public Booking getBooking() {
+        return booking;
+    }
+
+    public void setBooking(Booking booking) {
+        this.booking = booking;
+    }
 }

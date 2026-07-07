@@ -6,6 +6,7 @@ import com.pobitra.autocare.service.VehicleService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -21,6 +22,7 @@ public class VehicleController {
         this.vehicleService = vehicleService;
     }
 
+    @PreAuthorize("hasAnyRole('ADMIN','STAFF')")
     @PostMapping
     public ResponseEntity<VehicleResponseDTO> createVehicle(
             @Valid @RequestBody VehicleRequestDTO vehicleRequestDTO) {
@@ -30,18 +32,21 @@ public class VehicleController {
         return new ResponseEntity<>(savedVehicle, HttpStatus.CREATED);
     }
 
+    @PreAuthorize("hasAnyRole('ADMIN','STAFF')")
     @GetMapping
     public ResponseEntity<List<VehicleResponseDTO>> getAllVehicles() {
 
         return ResponseEntity.ok(vehicleService.getAllVehicles());
     }
 
+    @PreAuthorize("hasAnyRole('ADMIN','STAFF')")
     @GetMapping("/{id}")
     public ResponseEntity<VehicleResponseDTO> getVehicleById(@PathVariable Long id) {
 
         return ResponseEntity.ok(vehicleService.getVehicleById(id));
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteVehicle(@PathVariable Long id) {
 

@@ -8,6 +8,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -25,6 +26,7 @@ public class InvoiceController {
     }
 
     @Operation(summary = "Create a new invoice")
+    @PreAuthorize("hasAnyRole('ADMIN','STAFF')")
     @PostMapping
     public ResponseEntity<InvoiceResponseDTO> createInvoice(
             @Valid @RequestBody InvoiceRequestDTO dto) {
@@ -35,6 +37,7 @@ public class InvoiceController {
     }
 
     @Operation(summary = "Get all invoices")
+    @PreAuthorize("hasAnyRole('ADMIN','STAFF')")
     @GetMapping
     public ResponseEntity<List<InvoiceResponseDTO>> getAllInvoices() {
 
@@ -42,6 +45,7 @@ public class InvoiceController {
     }
 
     @Operation(summary = "Get invoice by ID")
+    @PreAuthorize("hasAnyRole('ADMIN','STAFF')")
     @GetMapping("/{id}")
     public ResponseEntity<InvoiceResponseDTO> getInvoiceById(@PathVariable Long id) {
 
@@ -49,6 +53,7 @@ public class InvoiceController {
     }
 
     @Operation(summary = "Get invoice by invoice number")
+    @PreAuthorize("hasAnyRole('ADMIN','STAFF')")
     @GetMapping("/number/{invoiceNumber}")
     public ResponseEntity<InvoiceResponseDTO> getInvoiceByNumber(
             @PathVariable String invoiceNumber) {
@@ -57,6 +62,7 @@ public class InvoiceController {
     }
 
     @Operation(summary = "Delete invoice")
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteInvoice(@PathVariable Long id) {
 

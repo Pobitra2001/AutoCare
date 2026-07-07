@@ -9,6 +9,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -26,6 +27,7 @@ public class ServiceRecordController {
     }
 
     @Operation(summary = "Create a new service record")
+    @PreAuthorize("hasAnyRole('ADMIN','STAFF')")
     @PostMapping
     public ResponseEntity<ServiceRecordResponseDTO> createServiceRecord(
             @Valid @RequestBody ServiceRecordRequestDTO dto) {
@@ -36,6 +38,7 @@ public class ServiceRecordController {
     }
 
     @Operation(summary = "Get all service records")
+    @PreAuthorize("hasAnyRole('ADMIN','STAFF')")
     @GetMapping
     public ResponseEntity<List<ServiceRecordResponseDTO>> getAllServiceRecords() {
 
@@ -43,6 +46,7 @@ public class ServiceRecordController {
     }
 
     @Operation(summary = "Get service record by ID")
+    @PreAuthorize("hasAnyRole('ADMIN','STAFF')")
     @GetMapping("/{id}")
     public ResponseEntity<ServiceRecordResponseDTO> getServiceRecordById(
             @PathVariable Long id) {
@@ -51,6 +55,7 @@ public class ServiceRecordController {
     }
 
     @Operation(summary = "Get service records by vehicle ID")
+    @PreAuthorize("hasAnyRole('ADMIN','STAFF')")
     @GetMapping("/vehicle/{vehicleId}")
     public ResponseEntity<List<ServiceRecordResponseDTO>> getByVehicle(
             @PathVariable Long vehicleId) {
@@ -59,6 +64,7 @@ public class ServiceRecordController {
     }
 
     @Operation(summary = "Get service records by status")
+    @PreAuthorize("hasAnyRole('ADMIN','STAFF')")
     @GetMapping("/status/{status}")
     public ResponseEntity<List<ServiceRecordResponseDTO>> getByStatus(
             @PathVariable ServiceStatus status) {
@@ -67,6 +73,7 @@ public class ServiceRecordController {
     }
 
     @Operation(summary = "Update service status")
+    @PreAuthorize("hasAnyRole('ADMIN','STAFF')")
     @PatchMapping("/{id}/status")
     public ResponseEntity<ServiceRecordResponseDTO> updateStatus(
             @PathVariable Long id,
@@ -76,6 +83,7 @@ public class ServiceRecordController {
     }
 
     @Operation(summary = "Delete service record")
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteServiceRecord(@PathVariable Long id) {
 

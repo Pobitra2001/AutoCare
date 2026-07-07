@@ -10,6 +10,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -25,6 +26,7 @@ public class CustomerController {
     }
 
     @Operation(summary = "Create a new customer")
+    @PreAuthorize("hasAnyRole('ADMIN','STAFF')")
     @PostMapping
     public ResponseEntity<CustomerResponseDTO> saveCustomer(
             @Valid @RequestBody CustomerRequestDTO customerRequestDTO) {
@@ -36,6 +38,7 @@ public class CustomerController {
     }
 
     @Operation(summary = "Get all customers with pagination and sorting")
+    @PreAuthorize("hasAnyRole('ADMIN','STAFF')")
     @GetMapping
     public ResponseEntity<PageResponseDTO<CustomerResponseDTO>> getAllCustomers(
 
@@ -53,6 +56,7 @@ public class CustomerController {
     }
 
     @Operation(summary = "Get customer by ID")
+    @PreAuthorize("hasAnyRole('ADMIN','STAFF')")
     @GetMapping("/{id}")
     public ResponseEntity<Customer> getCustomerById(@PathVariable Long id) {
 
@@ -62,6 +66,7 @@ public class CustomerController {
     }
 
     @Operation(summary = "Update customer")
+    @PreAuthorize("hasAnyRole('ADMIN','STAFF')")
     @PutMapping("/{id}")
     public ResponseEntity<Customer> updateCustomer(
             @PathVariable Long id,
@@ -73,6 +78,7 @@ public class CustomerController {
     }
 
     @Operation(summary = "Delete customer")
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteCustomer(@PathVariable Long id) {
 

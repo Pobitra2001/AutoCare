@@ -6,6 +6,7 @@ import com.pobitra.autocare.entity.ContactMessage;
 import com.pobitra.autocare.exception.ResourceNotFoundException;
 import com.pobitra.autocare.repository.ContactMessageRepository;
 import com.pobitra.autocare.service.ContactMessageService;
+import com.pobitra.autocare.service.EmailService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -15,9 +16,13 @@ import java.util.stream.Collectors;
 public class ContactMessageServiceImpl implements ContactMessageService {
 
     private final ContactMessageRepository repository;
+    private final EmailService emailService;
 
-    public ContactMessageServiceImpl(ContactMessageRepository repository) {
+    public ContactMessageServiceImpl(ContactMessageRepository repository,
+                                     EmailService emailService) {
+
         this.repository = repository;
+        this.emailService = emailService;
     }
 
     @Override
@@ -31,6 +36,29 @@ public class ContactMessageServiceImpl implements ContactMessageService {
         message.setMessage(dto.getMessage());
 
         ContactMessage saved = repository.save(message);
+
+        // Send acknowledgement email
+        emailService.sendEmail(
+                saved.getEmail(),
+                "We Received Your Message - AutoCare",
+                """
+                Hello %s,
+
+                Thank you for contacting AutoCare.
+
+                We have successfully received your message regarding:
+
+                "%s"
+
+                Our support team will review your query and get back to you as soon as possible.
+
+                Thank you for choosing AutoCare.
+
+                Regards,
+                AutoCare Team
+                """
+                        .formatted(saved.getName(), saved.getSubject())
+        );
 
         return mapToDTO(saved);
     }

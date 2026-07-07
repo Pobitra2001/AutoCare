@@ -58,8 +58,12 @@ public class SecurityConfig {
 
                         .requestMatchers(
                                 "/api/auth/**",
+                                "/api/email/**",
+                                "/api/contact/**",
                                 "/v3/api-docs/**",
                                 "/swagger-ui/**",
+                                "/api/invoices/**",
+                                "/api/bookings/**",
                                 "/swagger-ui.html")
                         .permitAll()
 
@@ -74,4 +78,7 @@ public class SecurityConfig {
 
         return http.build();
     }
+
+
+
 }
