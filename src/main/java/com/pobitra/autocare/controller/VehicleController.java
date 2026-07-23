@@ -25,16 +25,23 @@ public class VehicleController {
         this.vehicleService = vehicleService;
     }
 
+    // ==========================
+    // Create Vehicle
+    // ==========================
     @PreAuthorize("hasAnyRole('ADMIN','STAFF')")
     @PostMapping
     public ResponseEntity<VehicleResponseDTO> createVehicle(
             @Valid @RequestBody VehicleRequestDTO vehicleRequestDTO) {
 
-        VehicleResponseDTO savedVehicle = vehicleService.createVehicle(vehicleRequestDTO);
+        VehicleResponseDTO savedVehicle =
+                vehicleService.createVehicle(vehicleRequestDTO);
 
         return new ResponseEntity<>(savedVehicle, HttpStatus.CREATED);
     }
 
+    // ==========================
+    // Get All Vehicles
+    // ==========================
     @PreAuthorize("hasAnyRole('ADMIN','STAFF')")
     @GetMapping
     public ResponseEntity<List<VehicleResponseDTO>> getAllVehicles() {
@@ -42,16 +49,39 @@ public class VehicleController {
         return ResponseEntity.ok(vehicleService.getAllVehicles());
     }
 
+    // ==========================
+    // Get Vehicle By Id
+    // ==========================
     @PreAuthorize("hasAnyRole('ADMIN','STAFF')")
     @GetMapping("/{id}")
-    public ResponseEntity<VehicleResponseDTO> getVehicleById(@PathVariable Long id) {
+    public ResponseEntity<VehicleResponseDTO> getVehicleById(
+            @PathVariable Long id) {
 
         return ResponseEntity.ok(vehicleService.getVehicleById(id));
     }
 
+    // ==========================
+    // Update Vehicle
+    // ==========================
+    @PreAuthorize("hasAnyRole('ADMIN','STAFF')")
+    @PutMapping("/{id}")
+    public ResponseEntity<VehicleResponseDTO> updateVehicle(
+            @PathVariable Long id,
+            @Valid @RequestBody VehicleRequestDTO vehicleRequestDTO) {
+
+        VehicleResponseDTO updatedVehicle =
+                vehicleService.updateVehicle(id, vehicleRequestDTO);
+
+        return ResponseEntity.ok(updatedVehicle);
+    }
+
+    // ==========================
+    // Delete Vehicle
+    // ==========================
     @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteVehicle(@PathVariable Long id) {
+    public ResponseEntity<String> deleteVehicle(
+            @PathVariable Long id) {
 
         vehicleService.deleteVehicle(id);
 

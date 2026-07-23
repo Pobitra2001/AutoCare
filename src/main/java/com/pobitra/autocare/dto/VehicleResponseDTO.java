@@ -6,6 +6,7 @@ import com.pobitra.autocare.enums.VehicleType;
 public class VehicleResponseDTO {
 
     private Long id;
+    private String customerName;
     private String vehicleNumber;
     private String brand;
     private String model;
@@ -85,6 +86,9 @@ public class VehicleResponseDTO {
 
     public void setCustomerId(Long customerId) {
         this.customerId = customerId;
+    }
+
+    public void setCustomerName(String name) { this.customerName=customerName ;
     }
 // getters and setters
 }

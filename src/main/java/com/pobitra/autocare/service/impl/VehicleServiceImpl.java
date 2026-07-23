@@ -19,27 +19,31 @@ public class VehicleServiceImpl implements VehicleService {
     private final VehicleRepository vehicleRepository;
     private final CustomerRepository customerRepository;
 
-    public VehicleServiceImpl(VehicleRepository vehicleRepository,
-                              CustomerRepository customerRepository) {
+    public VehicleServiceImpl(
+            VehicleRepository vehicleRepository,
+            CustomerRepository customerRepository) {
+
         this.vehicleRepository = vehicleRepository;
         this.customerRepository = customerRepository;
     }
 
+    // ==========================
+    // Create Vehicle
+    // ==========================
     @Override
     public VehicleResponseDTO createVehicle(VehicleRequestDTO dto) {
 
-        // 1. Check duplicate vehicle number
         if (vehicleRepository.existsByVehicleNumber(dto.getVehicleNumber())) {
-            throw new RuntimeException("Vehicle number already exists");
+            throw new RuntimeException("Vehicle number already exists.");
         }
 
-        // 2. Find customer
         Customer customer = customerRepository.findById(dto.getCustomerId())
                 .orElseThrow(() ->
-                        new ResourceNotFoundException("Customer not found with id: " + dto.getCustomerId()));
+                        new ResourceNotFoundException(
+                                "Customer not found with id: " + dto.getCustomerId()));
 
-        // 3. DTO → Entity
         Vehicle vehicle = new Vehicle();
+
         vehicle.setVehicleNumber(dto.getVehicleNumber());
         vehicle.setBrand(dto.getBrand());
         vehicle.setModel(dto.getModel());
@@ -49,42 +53,88 @@ public class VehicleServiceImpl implements VehicleService {
         vehicle.setManufacturingYear(dto.getManufacturingYear());
         vehicle.setCustomer(customer);
 
-        Vehicle saved = vehicleRepository.save(vehicle);
+        Vehicle savedVehicle = vehicleRepository.save(vehicle);
 
-        // 4. Entity → ResponseDTO
-        return mapToDTO(saved);
+        return mapToDTO(savedVehicle);
     }
 
+    // ==========================
+    // Get All Vehicles
+    // ==========================
     @Override
     public List<VehicleResponseDTO> getAllVehicles() {
+
         return vehicleRepository.findAll()
                 .stream()
                 .map(this::mapToDTO)
                 .collect(Collectors.toList());
     }
 
+    // ==========================
+    // Get Vehicle By ID
+    // ==========================
     @Override
     public VehicleResponseDTO getVehicleById(Long id) {
+
         Vehicle vehicle = vehicleRepository.findById(id)
                 .orElseThrow(() ->
-                        new ResourceNotFoundException("Vehicle not found with id: " + id));
+                        new ResourceNotFoundException(
+                                "Vehicle not found with id: " + id));
 
         return mapToDTO(vehicle);
     }
 
+    // ==========================
+    // Update Vehicle
+    // ==========================
     @Override
-    public void deleteVehicle(Long id) {
+    public VehicleResponseDTO updateVehicle(Long id, VehicleRequestDTO dto) {
+
         Vehicle vehicle = vehicleRepository.findById(id)
                 .orElseThrow(() ->
-                        new ResourceNotFoundException("Vehicle not found with id: " + id));
+                        new ResourceNotFoundException(
+                                "Vehicle not found with id: " + id));
+
+        Customer customer = customerRepository.findById(dto.getCustomerId())
+                .orElseThrow(() ->
+                        new ResourceNotFoundException(
+                                "Customer not found with id: " + dto.getCustomerId()));
+
+        vehicle.setVehicleNumber(dto.getVehicleNumber());
+        vehicle.setBrand(dto.getBrand());
+        vehicle.setModel(dto.getModel());
+        vehicle.setColor(dto.getColor());
+        vehicle.setVehicleType(dto.getVehicleType());
+        vehicle.setFuelType(dto.getFuelType());
+        vehicle.setManufacturingYear(dto.getManufacturingYear());
+        vehicle.setCustomer(customer);
+
+        Vehicle updatedVehicle = vehicleRepository.save(vehicle);
+
+        return mapToDTO(updatedVehicle);
+    }
+
+    // ==========================
+    // Delete Vehicle
+    // ==========================
+    @Override
+    public void deleteVehicle(Long id) {
+
+        Vehicle vehicle = vehicleRepository.findById(id)
+                .orElseThrow(() ->
+                        new ResourceNotFoundException(
+                                "Vehicle not found with id: " + id));
 
         vehicleRepository.delete(vehicle);
     }
 
-    // Helper method
+    // ==========================
+    // Entity -> DTO
+    // ==========================
     private VehicleResponseDTO mapToDTO(Vehicle vehicle) {
 
         VehicleResponseDTO dto = new VehicleResponseDTO();
+
         dto.setId(vehicle.getId());
         dto.setVehicleNumber(vehicle.getVehicleNumber());
         dto.setBrand(vehicle.getBrand());
@@ -94,6 +144,9 @@ public class VehicleServiceImpl implements VehicleService {
         dto.setFuelType(vehicle.getFuelType());
         dto.setManufacturingYear(vehicle.getManufacturingYear());
         dto.setCustomerId(vehicle.getCustomer().getId());
+
+        // Uncomment only if VehicleResponseDTO has customerName
+        // dto.setCustomerName(vehicle.getCustomer().getName());
 
         return dto;
     }
