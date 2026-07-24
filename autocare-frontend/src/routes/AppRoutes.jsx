@@ -15,6 +15,10 @@ import CustomerForm from "../pages/admin/customers/CustomerForm";
 import VehicleList from "../pages/admin/vehicles/VehicleList";
 import VehicleForm from "../pages/admin/vehicles/VehicleForm";
 import VehicleDetails from "../pages/admin/vehicles/VehicleDetails";
+import BookingList from "../pages/admin/bookings/BookingList";
+import BookingForm from "../pages/admin/bookings/BookingForm";
+import BookingDetails from "../pages/admin/bookings/BookingDetails";
+
 
 
 
@@ -69,6 +73,22 @@ function AppRoutes() {
                      path="/admin/vehicles/view/:id"
                      element={<VehicleDetails />}
                  />
+                 {/* Bookings */}
+
+                            <Route
+                                path="/admin/bookings"
+                                element={<BookingList />}
+                            />
+
+                            <Route
+                                path="/admin/bookings/add"
+                                element={<BookingForm />}
+                            />
+
+                            <Route
+                                path="/admin/bookings/view/:id"
+                                element={<BookingDetails />}
+                            />
 
 
 
@@ -80,3 +100,6 @@ function AppRoutes() {
 }
 
 export default AppRoutes;
+
+
+
