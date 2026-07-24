@@ -119,6 +119,40 @@ public class ServiceRecordServiceImpl implements ServiceRecordService {
         return mapToDTO(serviceRecordRepository.save(record));
     }
 
+
+    @Override
+    public ServiceRecordResponseDTO updateServiceRecord(
+            Long id,
+            ServiceRecordRequestDTO dto) {
+
+        ServiceRecord record = serviceRecordRepository.findById(id)
+                .orElseThrow(() ->
+                        new ResourceNotFoundException(
+                                "Service Record not found with id: " + id));
+
+        Vehicle vehicle = vehicleRepository.findById(dto.getVehicleId())
+                .orElseThrow(() ->
+                        new ResourceNotFoundException(
+                                "Vehicle not found with id: " + dto.getVehicleId()));
+
+        Booking booking = bookingRepository.findById(dto.getBookingId())
+                .orElseThrow(() ->
+                        new ResourceNotFoundException(
+                                "Booking not found with id: " + dto.getBookingId()));
+
+        record.setServiceType(dto.getServiceType());
+        record.setDescription(dto.getDescription());
+        record.setServiceDate(dto.getServiceDate());
+        record.setStatus(dto.getStatus());
+
+        record.setVehicle(vehicle);
+        record.setBooking(booking);
+
+        ServiceRecord updated = serviceRecordRepository.save(record);
+
+        return mapToDTO(updated);
+    }
+
     @Override
     public void deleteServiceRecord(Long id) {
 

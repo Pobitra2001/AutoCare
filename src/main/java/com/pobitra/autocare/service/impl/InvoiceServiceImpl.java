@@ -97,6 +97,51 @@ public class InvoiceServiceImpl implements InvoiceService {
     }
 
     @Override
+    public InvoiceResponseDTO updateInvoice(Long id,
+                                            InvoiceRequestDTO dto) {
+
+        Invoice invoice = invoiceRepository.findById(id)
+                .orElseThrow(() ->
+                        new ResourceNotFoundException(
+                                "Invoice not found with id: " + id));
+
+        ServiceRecord serviceRecord =
+                serviceRecordRepository.findById(dto.getServiceRecordId())
+                        .orElseThrow(() ->
+                                new ResourceNotFoundException(
+                                        "Service Record not found with id: "
+                                                + dto.getServiceRecordId()));
+
+        invoice.setServiceCharge(dto.getServiceCharge());
+
+        invoice.setPartsCharge(dto.getPartsCharge());
+
+        invoice.setTax(dto.getTax());
+
+        invoice.setDiscount(dto.getDiscount());
+
+        invoice.setPaymentMethod(dto.getPaymentMethod());
+
+        invoice.setPaymentStatus(dto.getPaymentStatus());
+
+        invoice.setInvoiceDate(dto.getInvoiceDate());
+
+        invoice.setServiceRecord(serviceRecord);
+
+        double finalAmount =
+                dto.getServiceCharge()
+                        + dto.getPartsCharge()
+                        + dto.getTax()
+                        - dto.getDiscount();
+
+        invoice.setFinalAmount(finalAmount);
+
+        Invoice updated = invoiceRepository.save(invoice);
+
+        return mapToDTO(updated);
+    }
+
+    @Override
     public void deleteInvoice(Long id) {
 
         Invoice invoice = invoiceRepository.findById(id)

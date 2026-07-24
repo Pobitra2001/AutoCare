@@ -15,5 +15,7 @@ public interface InvoiceService {
 
     InvoiceResponseDTO getInvoiceByNumber(String invoiceNumber);
 
+    InvoiceResponseDTO updateInvoice(Long id, InvoiceRequestDTO dto);
+
     void deleteInvoice(Long id);
 }

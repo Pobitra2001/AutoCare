@@ -85,6 +85,18 @@ public class ServiceRecordController {
         return ResponseEntity.ok(serviceRecordService.updateServiceStatus(id, status));
     }
 
+    @Operation(summary = "Update service record")
+    @PreAuthorize("hasAnyRole('ADMIN','STAFF')")
+    @PutMapping("/{id}")
+    public ResponseEntity<ServiceRecordResponseDTO> updateServiceRecord(
+            @PathVariable Long id,
+            @Valid @RequestBody ServiceRecordRequestDTO dto) {
+
+        return ResponseEntity.ok(
+                serviceRecordService.updateServiceRecord(id, dto)
+        );
+    }
+
     @Operation(summary = "Delete service record")
     @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{id}")

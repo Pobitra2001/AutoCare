@@ -104,8 +104,8 @@ function Sidebar() {
                 <li className="nav-item mb-2">
 
                     <Link
-                        to="/admin/service-records"
-                        className={`nav-link text-white ${isActive("/admin/service-records")}`}
+                        to="/admin/servicerecords"
+                        className={`nav-link text-white ${isActive("/admin/servicerecords")}`}
                     >
 
                         <i className="bi bi-wrench-adjustable-circle me-2"></i>
@@ -133,40 +133,43 @@ function Sidebar() {
 
                 </li>
 
-                {/* Feedback */}
+               {/* Feedback */}
 
-                <li className="nav-item mb-2">
+               <li className="nav-item mb-2">
 
-                    <Link
-                        to="/admin/feedback"
-                        className={`nav-link text-white ${isActive("/admin/feedback")}`}
-                    >
+                   <Link
 
-                        <i className="bi bi-chat-left-text-fill me-2"></i>
+                       to="/admin/feedback"
 
-                        Feedback
+                       className={`nav-link text-white ${isActive("/admin/feedback")}`}
 
-                    </Link>
+                   >
 
-                </li>
+                       <i className="bi bi-chat-left-text-fill me-2"></i>
 
-                {/* Contact Messages */}
+                       Feedback
 
-                <li className="nav-item mb-2">
+                   </Link>
 
-                    <Link
-                        to="/admin/contact-messages"
-                        className={`nav-link text-white ${isActive("/admin/contact-messages")}`}
-                    >
+               </li>
 
-                        <i className="bi bi-envelope-fill me-2"></i>
+               <li className="nav-item mb-2">
 
-                        Contact Messages
+                   <Link
 
-                    </Link>
+                       to="/admin/contact-messages"
 
-                </li>
+                       className={`nav-link text-white ${isActive("/admin/contact-messages")}`}
 
+                   >
+
+                       <i className="bi bi-envelope-fill me-2"></i>
+
+                       Contact Messages
+
+                   </Link>
+
+               </li>
                 <hr className="border-secondary my-3" />
 
                 {/* Logout */}

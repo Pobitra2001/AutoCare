@@ -64,6 +64,17 @@ public class InvoiceController {
         return ResponseEntity.ok(invoiceService.getInvoiceByNumber(invoiceNumber));
     }
 
+    @Operation(summary = "Update invoice")
+    @PreAuthorize("hasAnyRole('ADMIN','STAFF')")
+    @PutMapping("/{id}")
+    public ResponseEntity<InvoiceResponseDTO> updateInvoice(
+            @PathVariable Long id,
+            @Valid @RequestBody InvoiceRequestDTO dto) {
+
+        return ResponseEntity.ok(
+                invoiceService.updateInvoice(id, dto));
+    }
+
     @Operation(summary = "Delete invoice")
     @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{id}")

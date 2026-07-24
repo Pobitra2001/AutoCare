@@ -3,6 +3,7 @@ package com.pobitra.autocare.service;
 import com.pobitra.autocare.dto.ServiceRecordRequestDTO;
 import com.pobitra.autocare.dto.ServiceRecordResponseDTO;
 import com.pobitra.autocare.enums.ServiceStatus;
+import jakarta.validation.Valid;
 
 import java.util.List;
 
@@ -21,4 +22,6 @@ public interface ServiceRecordService {
     ServiceRecordResponseDTO updateServiceStatus(Long id, ServiceStatus status);
 
     void deleteServiceRecord(Long id);
+
+    ServiceRecordResponseDTO updateServiceRecord(Long id, @Valid ServiceRecordRequestDTO dto);
 }
